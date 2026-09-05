@@ -1,4 +1,4 @@
-# Multi-Utility LangGraph PDF Chatbot
+# Multi-Utility LangGraph Chatbot
 
 A local-first, multi-utility AI conversational assistant built with **LangGraph**, **LangChain**, **Streamlit**, **Ollama**, **FAISS**, and **SQLite**. 
 
