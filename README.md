@@ -15,63 +15,59 @@ The application supports conversational AI, PDF-based question answering using R
 🗂️ Multiple chat threads
 🔄 Streaming AI responses
 📚 Thread-specific PDF retrieval
-🏗️ Architecture
-                        ┌─────────────────────┐
-                        │  Streamlit Frontend │
-                        └──────────┬──────────┘
-                                   │
-                                   ▼
-                        ┌─────────────────────┐
-                        │     LangGraph      │
-                        │      Workflow      │
-                        └──────────┬──────────┘
-                                   │
-                   ┌───────────────┼───────────────┐
-                   │               │               │
-                   ▼               ▼               ▼
-              Ollama LLM       Tool Node      SQLite Memory
-                   │               │
-                   │       ┌───────┼────────┐
-                   │       ▼       ▼        ▼
-                   │    Search  Calculator  Stock API
-                   │
-                   ▼
-              PDF RAG System
-                   │
-                   ▼
-             HuggingFace
-              Embeddings
-                   │
-                   ▼
-                 FAISS
-🔄 Application Workflow
-1. User Opens the Application
+## 🏗️ Architecture
 
-The Streamlit frontend creates or loads a unique conversation thread.
+```mermaid
+flowchart TD
+    A[Streamlit Frontend] --> B[LangGraph Workflow]
 
-User
-  ↓
-Streamlit Frontend
-  ↓
-Thread ID
+    B --> C[Chat Node]
+    B --> D[Tool Node]
 
-Each conversation has its own unique thread_id.
+    C --> E[Ollama - Qwen2.5 3B]
 
-2. User Sends a Message
+    D --> F[DuckDuckGo Search]
+    D --> G[Calculator]
+    D --> H[Stock Price API]
+    D --> I[RAG Tool]
 
-The user message is sent to the LangGraph workflow.
+    I --> J[FAISS Vector Store]
+    J --> K[HuggingFace Embeddings]
 
-User Message
-      ↓
-HumanMessage
-      ↓
-LangGraph
-      ↓
-Chat Node
-      ↓
-Ollama LLM
+    B --> L[SQLite Memory]
 
-The model then decides whether it can answer directly or needs to use a tool.
+### Application Workflow
+
+```markdown
+## 🔄 Application Workflow
+
+```mermaid
+flowchart TD
+    A[User Opens Application] --> B[Streamlit Frontend]
+    B --> C[Create or Load Thread ID]
+
+    C --> D{Upload PDF?}
+
+    D -->|Yes| E[PyPDFLoader]
+    E --> F[Split Document into Chunks]
+    F --> G[Create Embeddings]
+    G --> H[Store in FAISS]
+
+    D -->|No| I[User Sends Message]
+    H --> I
+
+    I --> J[LangGraph Chat Node]
+    J --> K[Ollama LLM]
+
+    K --> L{Tool Required?}
+
+    L -->|No| M[Generate Response]
+
+    L -->|Yes| N[Tool Node]
+    N --> O[Execute Tool]
+    O --> J
+
+    M --> P[Display Response]
 
 3. Tool Calling Workflow
                     ┌─────────────┐
@@ -100,25 +96,23 @@ DuckDuckGo Search
 Calculator
 Stock Price Tool
 RAG Tool
-📄 PDF RAG Workflow
+### RAG Workflow
 
-When a user uploads a PDF:
+```markdown
+## 📄 PDF RAG Workflow
 
-PDF Upload
-    ↓
-PyPDFLoader
-    ↓
-Extract PDF Pages
-    ↓
-Text Splitter
-    ↓
-Document Chunks
-    ↓
-HuggingFace Embeddings
-    ↓
-FAISS Vector Store
-    ↓
-Retriever
+```mermaid
+flowchart LR
+    A[PDF Upload] --> B[PyPDFLoader]
+    B --> C[Document Pages]
+    C --> D[Text Splitter]
+    D --> E[Document Chunks]
+    E --> F[HuggingFace Embeddings]
+    F --> G[FAISS Vector Store]
+    G --> H[Retriever]
+    H --> I[Relevant Context]
+    I --> J[Ollama LLM]
+    J --> K[Final Answer]
 
 The document is stored separately for each conversation thread.
 
