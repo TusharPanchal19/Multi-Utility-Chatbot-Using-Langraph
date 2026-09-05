@@ -153,9 +153,6 @@ Defined in [`streamlit-frontend.py`](file:///d:/Projects/LangGraph%20Chatbot/str
 ├── local_model.py          # LangGraph graph, Ollama LLM, tools, RAG logic, and SQLite persistence
 ├── streamlit-frontend.py   # Streamlit UI, chat streaming, thread switcher, and PDF uploader
 ├── .env                    # Environment variables (HuggingFace token)
-├── chatbot.db              # SQLite database storing conversation checkpoints
-├── chatbot.db-wal          # SQLite write-ahead log
-├── chatbot.db-shm          # SQLite shared memory file
 ├── requirements.txt        # Project package dependencies
 └── readme.md               # Project documentation
 ```
