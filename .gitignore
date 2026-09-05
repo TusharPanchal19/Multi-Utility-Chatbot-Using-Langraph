@@ -1,0 +1,12 @@
+
+__pycache__/
+*.pyc
+
+chatbot.db
+chatbot.db-shm
+chatbot.db-wal
+chatbot_backend.py
+gemini_model_backend.py
+
+.faiss/
+vectorstore/
